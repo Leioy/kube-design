@@ -1,10 +1,10 @@
 {
   "index_name": "kube-design",
   "start_urls": [
-    "https://kube-design-docs.vercel.app/"
+    "https://kube-design-docusaurus.vercel.app/"
   ],
   "sitemap_urls": [
-    "https://kube-design-docs.vercel.app/sitemap.xml"
+    "https://kube-design-docusaurus.vercel.app/sitemap.xml"
   ],
   "stop_urls": [
     "/search",
