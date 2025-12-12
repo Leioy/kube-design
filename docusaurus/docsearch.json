@@ -38,7 +38,7 @@
     "separatorsToIndex": "_"
   },
   "conversation_id": ["comments"],
-  "js_render": true,  // 启用 JS 执行，抓动态内容
-  "js_wait": 3,       // 等待 3 秒加载 Docusaurus 组件
-  "max_depth": 3      // 限制爬取深度，避免无限循环
+  "js_render": true,
+  "js_wait": 3,      
+  "max_depth": 3
 }
