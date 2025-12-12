@@ -28,7 +28,7 @@ jobs:
       - name: 读取 docsearch.json 配置
         id: algolia_config
         run: |
-          CONFIG=$(cat docsearch.json | jq -c .)
+          CONFIG=$(cat docusaurus/docsearch.json | jq -c .)
           echo "config=$CONFIG" >> $GITHUB_OUTPUT
 
       - name: 手动输入了 URL 就覆盖 config 中的 start_urls（可选功能）
