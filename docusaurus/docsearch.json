@@ -2,7 +2,7 @@
   "index_name": "kube-design",
   "start_urls": [
     {
-      "url": "https://kube-design-docusaurus-n7dedmvrq-leioy1s-projects.vercel.app/",
+      "url": "https://kube-design-docusaurus.vercel.app/",
       "selectors_key": ""
     }
   ],
