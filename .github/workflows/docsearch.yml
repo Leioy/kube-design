@@ -1,0 +1,53 @@
+# 文件路径：.github/workflows/docsearch.yml
+name: Update Algolia DocSearch Index
+
+# 触发方式（三选一或同时生效）
+on:
+  # 1. 推送到 main 分支时自动触发（最常用）
+  push:
+    branches:
+      - main
+      - master   # 如果你用的是 master 分支也加一下
+
+  # 2. 手动触发（重点来了！）
+  workflow_dispatch:
+    # 可选：加一个输入框让你手动填网站 URL（不想填就删掉这几行）
+    inputs:
+      site_url:
+        description: '网站地址（默认自动读取 config 中的 start_urls）'
+        required: false
+        default: ''
+
+jobs:
+  algolia:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 代码
+        uses: actions/checkout@v4
+
+      - name: 读取 docsearch.json 配置
+        id: algolia_config
+        run: |
+          CONFIG=$(cat docsearch.json | jq -c .)
+          echo "config=$CONFIG" >> $GITHUB_OUTPUT
+
+      - name: 手动输入了 URL 就覆盖 config 中的 start_urls（可选功能）
+        if: github.event.inputs.site_url != ''
+        run: |
+          NEW_CONFIG=$(jq --arg url "${{ github.event.inputs.site_url }}" \
+            '.start_urls[0].url = $url' docsearch.json)
+          echo "$NEW_CONFIG" > docsearch.json.tmp
+          mv docsearch.json.tmp docsearch.json
+          echo "已替换为手动输入的 URL: ${{ github.event.inputs.site_url }}"
+
+      - name: 运行 Algolia 官方爬虫
+        env:
+          APPLICATION_ID: ${{ secrets.APPLICATION_ID }}   # 你的 Application ID
+          API_KEY: ${{ secrets.API_KEY }}                 # 你的 Admin API Key（写权限）
+          CONFIG: ${{ steps.algolia_config.outputs.config }}
+        run: |
+          docker run --rm \
+            --env APPLICATION_ID=${APPLICATION_ID} \
+            --env API_KEY=${API_KEY} \
+            --env "CONFIG=${CONFIG}" \
+            algolia/docsearch-scraper
